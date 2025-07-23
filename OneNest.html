@@ -1,0 +1,1281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OneNest - India's Unified SuperApp</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #ff9900;
+            --primary-dark: #e68a00;
+            --secondary: #222222;
+            --dark: #000000;
+            --light: #f5f5f5;
+            --success: #28a745;
+            --danger: #dc3545;
+            --gray: #6c757d;
+            --light-gray: #e9ecef;
+            --card-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: #f8f9fa;
+            color: var(--secondary);
+            overflow-x: hidden;
+        }
+        
+        /* Modal Background */
+        .modal-backdrop {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            max-width: 500px;
+            width: 90%;
+            animation: popIn 0.4s ease-out;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        @keyframes popIn {
+            0% { transform: scale(0.8); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        .modal-header {
+            background-color: var(--primary);
+            color: white;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+        
+        .close-modal {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.8rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .close-modal:hover {
+            transform: rotate(90deg);
+        }
+        
+        .modal-body {
+            padding: 30px;
+        }
+        
+        .service-modal .modal-body {
+            text-align: center;
+        }
+        
+        .service-modal-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            color: var(--primary);
+        }
+        
+        .service-modal-title {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: var(--secondary);
+        }
+        
+        .service-modal-description {
+            color: var(--gray);
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+        
+        .modal-btn {
+            padding: 12px 25px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+            background-color: var(--primary);
+            color: white;
+            margin: 0 10px;
+        }
+        
+        .modal-btn:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        /* Header & Navigation */
+        header {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .top-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 5%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .logo-icon {
+            font-size: 2rem;
+            color: var(--primary);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: var(--secondary);
+            font-weight: 500;
+            padding: 8px 15px;
+            border-radius: 20px;
+            transition: var(--transition);
+        }
+
+        .nav-link:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .nav-btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .nav-btn:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .hamburger {
+            display: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Main Content Sections */
+        .section {
+            display: none;
+            padding: 40px 5%;
+            min-height: 80vh;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .active {
+            display: block;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 40px;
+            color: var(--secondary);
+            position: relative;
+        }
+
+        .section-title:after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 4px;
+            background: var(--primary);
+            border-radius: 2px;
+        }
+
+        /* Hero Section */
+        #home {
+            background: linear-gradient(rgba(255,255,255,0.9), rgba(255,255,255,0.9)), url('https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            box-shadow: var(--card-shadow);
+        }
+
+        .hero-title {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+
+        .hero-subtitle {
+            font-size: 1.2rem;
+            color: var(--secondary);
+            margin-bottom: 30px;
+            max-width: 600px;
+        }
+
+        .hero-btns {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .hero-btn {
+            padding: 12px 30px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-secondary {
+            background-color: var(--secondary);
+            color: white;
+        }
+
+        .hero-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .app-features {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 50px;
+            flex-wrap: wrap;
+        }
+
+        .feature {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            width: 200px;
+            box-shadow: var(--card-shadow);
+            transition: var(--transition);
+        }
+
+        .feature:hover {
+            transform: translateY(-10px);
+        }
+
+        .feature i {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        .feature h3 {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+
+        /* Form Styles */
+        .form-container {
+            max-width: 500px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: var(--card-shadow);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .form-input:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(255, 153, 0, 0.2);
+        }
+
+        .input-icon {
+            position: relative;
+        }
+
+        .input-icon i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray);
+        }
+
+        .input-icon input {
+            padding-left: 45px;
+        }
+
+        .submit-btn {
+            background-color: var(--success);
+            color: white;
+            border: none;
+            padding: 14px;
+            width: 100%;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-top: 10px;
+        }
+
+        .submit-btn:hover {
+            background-color: #218838;
+            transform: translateY(-2px);
+        }
+
+        .form-footer {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .form-link {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        /* Dashboard */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 25px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .service-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px 15px;
+            text-align: center;
+            box-shadow: var(--card-shadow);
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+
+        .service-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            color: var(--primary);
+            transition: var(--transition);
+        }
+
+        .service-card:hover .service-icon {
+            transform: scale(1.1);
+        }
+
+        .service-name {
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        /* Cloud Account */
+        .cloud-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: var(--card-shadow);
+        }
+
+        .cloud-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .cloud-icon {
+            font-size: 2.5rem;
+            color: var(--primary);
+        }
+
+        .cloud-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+        }
+
+        .toggle-group {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .toggle-label {
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 30px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 22px;
+            width: 22px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: var(--success);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(30px);
+        }
+
+        /* Delivery Agent */
+        .delivery-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: var(--card-shadow);
+        }
+
+        .stats-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .stat-card {
+            background: var(--light);
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: var(--card-shadow);
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin: 10px 0;
+        }
+
+        .stat-label {
+            font-size: 1.1rem;
+            color: var(--gray);
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--secondary);
+            color: white;
+            padding: 50px 5% 20px;
+            margin-top: 50px;
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+        }
+
+        .footer-column h3 {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            color: var(--primary);
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 12px;
+        }
+
+        .footer-links a {
+            color: #ddd;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .social-icon:hover {
+            background-color: var(--primary);
+            transform: translateY(-3px);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            margin-top: 30px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .hamburger {
+                display: block;
+            }
+            
+            .mobile-nav {
+                display: flex;
+                flex-direction: column;
+                background: white;
+                position: fixed;
+                top: 70px;
+                left: 0;
+                width: 100%;
+                padding: 20px;
+                box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+                z-index: 99;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 1rem;
+            }
+            
+            .hero-btns {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .feature {
+                width: 100%;
+                max-width: 300px;
+            }
+            
+            .services-grid {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+                gap: 15px;
+            }
+            
+            .modal-content {
+                width: 95%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .top-nav {
+                padding: 15px;
+            }
+            
+            .logo h1 {
+                font-size: 1.5rem;
+            }
+            
+            .hero-content {
+                padding: 20px;
+            }
+            
+            .hero-title {
+                font-size: 1.8rem;
+            }
+            
+            .form-container, .cloud-container, .delivery-container {
+                padding: 20px;
+            }
+            
+            .modal-body {
+                padding: 20px;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.6s ease forwards;
+        }
+
+        .delivery-icon {
+            position: relative;
+        }
+
+        .delivery-icon::after {
+            content: '';
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            width: 10px;
+            height: 10px;
+            background-color: var(--danger);
+            border-radius: 50%;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(0.8); opacity: 0.7; }
+            50% { transform: scale(1.2); opacity: 1; }
+            100% { transform: scale(0.8); opacity: 0.7; }
+        }
+
+        .flashing {
+            animation: flash 1s infinite;
+        }
+
+        @keyframes flash {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Modal Backdrop -->
+    <div class="modal-backdrop" id="modalBackdrop">
+        <!-- Login Modal -->
+        <div class="modal-content" id="loginModal">
+            <div class="modal-header">
+                <h3 class="modal-title">Welcome back to OneNest</h3>
+                <button class="close-modal" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group input-icon">
+                    <i class="fas fa-mobile-alt"></i>
+                    <input type="tel" class="form-input" placeholder="Mobile Number">
+                </div>
+                
+                <div class="form-group input-icon">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" class="form-input" placeholder="Password">
+                </div>
+                
+                <button class="submit-btn" onclick="loginUser()">Login</button>
+                
+                <div class="form-footer">
+                    <p>New user? <a href="#" class="form-link" onclick="showSignupModal()">Sign up here</a></p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Signup Modal -->
+        <div class="modal-content" id="signupModal" style="display: none;">
+            <div class="modal-header">
+                <h3 class="modal-title">Create your OneNest Account</h3>
+                <button class="close-modal" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group input-icon">
+                    <i class="fas fa-mobile-alt"></i>
+                    <input type="tel" class="form-input" placeholder="Mobile Number">
+                </div>
+                
+                <div class="form-group">
+                    <input type="text" class="form-input" placeholder="Enter OTP">
+                </div>
+                
+                <div class="form-group input-icon">
+                    <i class="fas fa-user"></i>
+                    <input type="text" class="form-input" placeholder="Full Name">
+                </div>
+                
+                <div class="form-group input-icon">
+                    <i class="fas fa-envelope"></i>
+                    <input type="email" class="form-input" placeholder="Email Address">
+                </div>
+                
+                <div class="form-group input-icon">
+                    <i class="fas fa-home"></i>
+                    <input type="text" class="form-input" placeholder="Address">
+                </div>
+                
+                <div class="form-group input-icon">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" class="form-input" placeholder="Set Password">
+                </div>
+                
+                <button class="submit-btn" onclick="signupUser()">Register</button>
+                
+                <div class="form-footer">
+                    <p>Already have an account? <a href="#" class="form-link" onclick="showLoginModal()">Login here</a></p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Service Modal -->
+        <div class="modal-content service-modal" id="serviceModal" style="display: none;">
+            <div class="modal-header">
+                <h3 class="modal-title" id="serviceModalTitle">Service Details</h3>
+                <button class="close-modal" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <i class="fas" id="serviceModalIcon" style="font-size: 4rem; color: var(--primary);"></i>
+                <h2 class="service-modal-title" id="serviceModalName">Service Name</h2>
+                <p class="service-modal-description" id="serviceModalDescription">Service description will appear here.</p>
+                <button class="modal-btn" onclick="closeModal()">Close</button>
+                <button class="modal-btn" onclick="showDemoAlert()">Try Service</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header & Navigation -->
+    <header>
+        <div class="top-nav">
+            <div class="logo">
+                <i class="fas fa-dove logo-icon"></i>
+                <h1>OneNest</h1>
+            </div>
+            
+            <div class="nav-links">
+                <a href="#" class="nav-link" onclick="showSection('home')">Home</a>
+                <a href="#" class="nav-link" onclick="showSection('services')">Services</a>
+                <a href="#" class="nav-link" onclick="showSection('cloud')">Cloud Account</a>
+                <a href="#" class="nav-link" onclick="showSection('delivery')">Delivery Agent</a>
+                <button class="nav-btn" onclick="showLoginModal()">Login</button>
+                <button class="nav-btn" onclick="showSignupModal()">Sign Up</button>
+            </div>
+            
+            <div class="hamburger" onclick="toggleMobileNav()">
+                <i class="fas fa-bars"></i>
+            </div>
+        </div>
+        
+        <div class="mobile-nav" id="mobileNav" style="display: none;">
+            <a href="#" class="nav-link" onclick="showSection('home')">Home</a>
+            <a href="#" class="nav-link" onclick="showSection('services')">Services</a>
+            <a href="#" class="nav-link" onclick="showSection('cloud')">Cloud Account</a>
+            <a href="#" class="nav-link" onclick="showSection('delivery')">Delivery Agent</a>
+            <button class="nav-btn" style="margin: 10px 0;" onclick="showLoginModal()">Login</button>
+            <button class="nav-btn" style="margin: 10px 0;" onclick="showSignupModal()">Sign Up</button>
+        </div>
+    </header>
+
+    <!-- Home Section -->
+    <section id="home" class="section active">
+        <div class="hero-content fade-in">
+            <h1 class="hero-title">Welcome to OneNest</h1>
+            <p class="hero-subtitle">India's first unified SuperApp for all your daily needs - from food delivery to emergency services, all in one place.</p>
+            
+            <div class="hero-btns">
+                <button class="hero-btn btn-primary" onclick="showSection('services')">Explore Services</button>
+                <button class="hero-btn btn-secondary" onclick="showSignupModal()">Get Started</button>
+            </div>
+        </div>
+        
+        <div class="app-features">
+            <div class="feature fade-in">
+                <i class="fas fa-bolt"></i>
+                <h3>Fast Delivery</h3>
+                <p>Get anything delivered in minutes</p>
+            </div>
+            
+            <div class="feature fade-in">
+                <i class="fas fa-shield-alt"></i>
+                <h3>Secure Payments</h3>
+                <p>100% secure transactions</p>
+            </div>
+            
+            <div class="feature fade-in">
+                <i class="fas fa-rupee-sign"></i>
+                <h3>Great Savings</h3>
+                <p>Best deals and discounts</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Login Section -->
+    <section id="login" class="section">
+        <h2 class="section-title">Welcome back to OneNest</h2>
+        
+        <div class="form-container fade-in">
+            <div class="form-group input-icon">
+                <i class="fas fa-mobile-alt"></i>
+                <input type="tel" class="form-input" placeholder="Mobile Number">
+            </div>
+            
+            <div class="form-group input-icon">
+                <i class="fas fa-lock"></i>
+                <input type="password" class="form-input" placeholder="Password">
+            </div>
+            
+            <button class="submit-btn" onclick="loginUser()">Login</button>
+            
+            <div class="form-footer">
+                <p>New user? <a href="#" class="form-link" onclick="showSignupModal()">Sign up here</a></p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Signup Section -->
+    <section id="signup" class="section">
+        <h2 class="section-title">Create your OneNest Account</h2>
+        
+        <div class="form-container fade-in">
+            <div class="form-group input-icon">
+                <i class="fas fa-mobile-alt"></i>
+                <input type="tel" class="form-input" placeholder="Mobile Number">
+            </div>
+            
+            <div class="form-group">
+                <input type="text" class="form-input" placeholder="Enter OTP">
+            </div>
+            
+            <div class="form-group input-icon">
+                <i class="fas fa-user"></i>
+                <input type="text" class="form-input" placeholder="Full Name">
+            </div>
+            
+            <div class="form-group input-icon">
+                <i class="fas fa-envelope"></i>
+                <input type="email" class="form-input" placeholder="Email Address">
+            </div>
+            
+            <div class="form-group input-icon">
+                <i class="fas fa-home"></i>
+                <input type="text" class="form-input" placeholder="Address">
+            </div>
+            
+            <div class="form-group input-icon">
+                <i class="fas fa-lock"></i>
+                <input type="password" class="form-input" placeholder="Set Password">
+            </div>
+            
+            <button class="submit-btn" onclick="signupUser()">Register</button>
+            
+            <div class="form-footer">
+                <p>Already have an account? <a href="#" class="form-link" onclick="showLoginModal()">Login here</a></p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Dashboard -->
+    <section id="services" class="section">
+        <h2 class="section-title">OneNest Services</h2>
+        
+        <div class="services-grid">
+            <div class="service-card" onclick="showServiceModal('Food Delivery', 'fas fa-utensils', 'Order from thousands of restaurants near you. Get your favorite meals delivered right to your doorstep in minutes.')">
+                <i class="fas fa-utensils service-icon"></i>
+                <h3 class="service-name">Food Delivery</h3>
+            </div>
+            
+            <div class="service-card" onclick="showServiceModal('Medical Help', 'fas fa-first-aid', 'Get medicines delivered, book doctor appointments, or find nearby pharmacies. Emergency medical assistance available 24/7.')">
+                <i class="fas fa-first-aid service-icon flashing" style="color: var(--danger);"></i>
+                <h3 class="service-name">Medical Help</h3>
+            </div>
+            
+            <div class="service-card" onclick="showServiceModal('Emergency Services', 'fas fa-ambulance', 'Immediate assistance for emergencies. Connect to police, fire department, ambulance with live location tracking.')">
+                <i class="fas fa-ambulance service-icon delivery-icon" style="color: var(--danger);"></i>
+                <h3 class="service-name">Emergency</h3>
+            </div>
+            
+            <div class="service-card" onclick="showServiceModal('Online Shopping', 'fas fa-shopping-cart', 'Shop from millions of products across categories. Electronics, fashion, home appliances and more with easy returns.')">
+                <i class="fas fa-shopping-cart service-icon"></i>
+                <h3 class="service-name">Online Shopping</h3>
+            </div>
+            
+            <div class="service-card" onclick="showServiceModal('Cab Booking', 'fas fa-taxi', 'Book rides across the city. Choose from auto, bike, sedan or SUV. Available 24/7 with safety features.')">
+                <i class="fas fa-taxi service-icon"></i>
+                <h3 class="service-name">Cab Booking</h3>
+            </div>
+            
+            <div class="service-card" onclick="showServiceModal('Grocery Delivery', 'fas fa-shopping-basket', 'Fresh fruits, vegetables, dairy and pantry essentials delivered to your home in 30 minutes or less.')">
+                <i class="fas fa-shopping-basket service-icon"></i>
+                <h3 class="service-name">Grocery</h3>
+            </div>
+            
+            <div class="service-card" onclick="showServiceModal('Travel Booking', 'fas fa-train', 'Book flights, trains, buses and hotels at best prices. All your travel needs in one place.')">
+                <i class="fas fa-train service-icon"></i>
+                <h3 class="service-name">Travel</h3>
+            </div>
+            
+            <div class="service-card" onclick="showServiceModal('Payments', 'fas fa-money-bill-wave', 'Pay bills, recharge mobiles, send money to friends, and make secure online payments.')">
+                <i class="fas fa-money-bill-wave service-icon"></i>
+                <h3 class="service-name">Payments</h3>
+            </div>
+        </div>
+    </section>
+
+    <!-- Cloud Account -->
+    <section id="cloud" class="section">
+        <h2 class="section-title">Cloud Account</h2>
+        
+        <div class="cloud-container fade-in">
+            <div class="cloud-header">
+                <i class="fas fa-cloud cloud-icon"></i>
+                <h2 class="cloud-title">Sync Your Preferences</h2>
+            </div>
+            
+            <div class="toggle-group">
+                <span class="toggle-label">Enable Cloud Backup</span>
+                <label class="toggle-switch">
+                    <input type="checkbox" checked>
+                    <span class="slider"></span>
+                </label>
+            </div>
+            
+            <div class="toggle-group">
+                <span class="toggle-label">Auto-login next time</span>
+                <label class="toggle-switch">
+                    <input type="checkbox">
+                    <span class="slider"></span>
+                </label>
+            </div>
+            
+            <div class="toggle-group">
+                <span class="toggle-label">Sync Payment Methods</span>
+                <label class="toggle-switch">
+                    <input type="checkbox" checked>
+                    <span class="slider"></span>
+                </label>
+            </div>
+            
+            <div class="toggle-group">
+                <span class="toggle-label">Location Services</span>
+                <label class="toggle-switch">
+                    <input type="checkbox">
+                    <span class="slider"></span>
+                </label>
+            </div>
+        </div>
+    </section>
+
+    <!-- Delivery Agent Portal -->
+    <section id="delivery" class="section">
+        <h2 class="section-title">Delivery Agent Portal</h2>
+        
+        <div class="delivery-container fade-in">
+            <div class="form-group input-icon">
+                <i class="fas fa-mobile-alt"></i>
+                <input type="tel" class="form-input" placeholder="Mobile Number">
+            </div>
+            
+            <div class="form-group input-icon">
+                <i class="fas fa-lock"></i>
+                <input type="password" class="form-input" placeholder="Password">
+            </div>
+            
+            <button class="submit-btn" onclick="deliveryLogin()">Login as Delivery Agent</button>
+            
+            <div class="stats-cards">
+                <div class="stat-card">
+                    <i class="fas fa-shipping-fast" style="font-size: 2rem; color: var(--primary);"></i>
+                    <div class="stat-value">1,248</div>
+                    <div class="stat-label">Total Orders Delivered</div>
+                </div>
+                
+                <div class="stat-card">
+                    <i class="fas fa-rupee-sign" style="font-size: 2rem; color: var(--success);"></i>
+                    <div class="stat-value">₹42,850</div>
+                    <div class="stat-label">Total Earnings</div>
+                </div>
+                
+                <div class="stat-card">
+                    <i class="fas fa-star" style="font-size: 2rem; color: var(--primary);"></i>
+                    <div class="stat-value">4.8</div>
+                    <div class="stat-label">Customer Rating</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-column">
+                <h3>OneNest</h3>
+                <p>India's unified SuperApp for all your daily needs. Food, shopping, travel, payments and more.</p>
+                <div class="social-icons">
+                    <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+            
+            <div class="footer-column">
+                <h3>Services</h3>
+                <ul class="footer-links">
+                    <li><a href="#">Food Delivery</a></li>
+                    <li><a href="#">Grocery</a></li>
+                    <li><a href="#">Online Shopping</a></li>
+                    <li><a href="#">Cab Booking</a></li>
+                    <li><a href="#">Medical Help</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-column">
+                <h3>Company</h3>
+                <ul class="footer-links">
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Careers</a></li>
+                    <li><a href="#">Blog</a></li>
+                    <li><a href="#">Press</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-column">
+                <h3>Support</h3>
+                <ul class="footer-links">
+                    <li><a href="#">Help Center</a></li>
+                    <li><a href="#">FAQs</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms of Service</a></li>
+                    <li><a href="#">Refund Policy</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="copyright">
+            <p>&copy; 2025 OneNest. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Modal functions
+        function showModal(modalId) {
+            document.getElementById('modalBackdrop').style.display = 'flex';
+            document.getElementById(modalId).style.display = 'block';
+            
+            // Hide other modals
+            const modals = document.querySelectorAll('.modal-content');
+            modals.forEach(modal => {
+                if(modal.id !== modalId) {
+                    modal.style.display = 'none';
+                }
+            });
+        }
+        
+        function closeModal() {
+            document.getElementById('modalBackdrop').style.display = 'none';
+        }
+        
+        function showLoginModal() {
+            showModal('loginModal');
+        }
+        
+        function showSignupModal() {
+            showModal('signupModal');
+        }
+        
+        function showServiceModal(name, iconClass, description) {
+            document.getElementById('serviceModalTitle').textContent = name;
+            document.getElementById('serviceModalName').textContent = name;
+            document.getElementById('serviceModalIcon').className = iconClass + ' service-modal-icon';
+            document.getElementById('serviceModalDescription').textContent = description;
+            showModal('serviceModal');
+        }
+
+        // Show specific section and hide others
+        function showSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Show requested section
+            document.getElementById(sectionId).classList.add('active');
+            
+            // Close mobile nav if open
+            document.getElementById('mobileNav').style.display = 'none';
+            
+            // Close modal if open
+            closeModal();
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+        
+        // Toggle mobile navigation
+        function toggleMobileNav() {
+            const mobileNav = document.getElementById('mobileNav');
+            mobileNav.style.display = mobileNav.style.display === 'flex' ? 'none' : 'flex';
+        }
+        
+        // Mock login function
+        function loginUser() {
+            alert("This is just a demo. In a real application, this would log you into your account and show the dashboard.");
+            showSection('services');
+            closeModal();
+        }
+        
+        // Mock signup function
+        function signupUser() {
+            alert("This is just a demo. In a real application, this would create your account and log you in.");
+            showSection('services');
+            closeModal();
+        }
+        
+        // Mock delivery login
+        function deliveryLogin() {
+            alert("This is just a demo. Delivery agent portal would open after successful login.");
+        }
+        
+        // Show demo alert for services
+        function showDemoAlert() {
+            alert("This is just a demo. Feature coming soon!");
+        }
+        
+        // Initialize animations
+        document.querySelectorAll('.fade-in').forEach(el => {
+            el.style.opacity = '0';
+        });
+        
+        setTimeout(() => {
+            document.querySelectorAll('.fade-in').forEach(el => {
+                el.style.opacity = '1';
+            });
+        }, 100);
+    </script>
+</body>
+</html>
